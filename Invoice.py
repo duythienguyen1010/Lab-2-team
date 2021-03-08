@@ -3,11 +3,12 @@ class Invoice:
     def __init__(self):
         self.items = {}
 
-    def addProduct(self, qnt, price, discount, tax):
+    def addProduct(self, qnt, price, discount, fed_tax, state_tax):
         self.items['qnt'] = qnt
         self.items['unit_price'] = price
         self.items['discount'] = discount
-        self.items['tax'] = tax
+        self.items['fed_tax'] = fed_tax
+        self.items['state_tax'] = state_tax
         return self.items
 
     def totalImpurePrice(self, products):
@@ -25,16 +26,25 @@ class Invoice:
         self.total_discount = total_discount
         return total_discount
 
-    def totalTax(self, products):
-        total_tax = 0
+    def totalFedTax(self, products):
+        total_fed_tax = 0
         for k, v in products.items():
-            total_tax += (int(v['qnt']) * float(v['unit_price']) * float(v['tax']) / 100)
-        total_tax = round(total_tax, 2)
-        self.total_tax = total_tax
-        return total_tax
+            total_fed_tax += (int(v['qnt']) * float(v['unit_price']) * float(v['fed_tax']) / 100)
+        total_fed_tax = round(total_fed_tax, 2)
+        self.total_fed_tax = total_fed_tax
+        return total_fed_tax
+
+    def totalStateTax(self, products):
+        total_state_tax = 0
+        for k, v in products.items():
+            total_state_tax += (int(v['qnt']) * float(v['unit_price']) * float(v['state_tax']) / 100)
+        total_state_tax = round(total_state_tax, 2)
+        self.total_state_tax = total_state_tax
+        return total_state_tax
 
     def totalPurePrice(self, products):
-        total_pure_price = self.totalImpurePrice(products) - self.totalDiscount(products) + self.totalTax(products)
+        total_pure_price = self.totalImpurePrice(products) - self.totalDiscount(products) + self.totalFedTax(products) \
+                         + self.totalStateTax(products)
         return total_pure_price
 
     def inputAnswer(self, input_value):

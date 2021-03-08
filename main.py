@@ -4,7 +4,6 @@ products = {}
 total_amount = 0
 repeat = ''
 while True:
-
     product = input('what is your product : ')
     unit_price = Invoice().inputNumber("Please enter unit price : ")
     qnt = Invoice().inputNumber("Please enter the quantity of the product : ")
