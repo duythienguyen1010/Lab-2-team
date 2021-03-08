@@ -3,10 +3,11 @@ class Invoice:
     def __init__(self):
         self.items = {}
 
-    def addProduct(self, qnt, price, discount):
+    def addProduct(self, qnt, price, discount, tax):
         self.items['qnt'] = qnt
         self.items['unit_price'] = price
         self.items['discount'] = discount
+        self.items['tax'] = tax
         return self.items
 
     def totalImpurePrice(self, products):
@@ -24,8 +25,16 @@ class Invoice:
         self.total_discount = total_discount
         return total_discount
 
+    def totalTax(self, products):
+        total_tax = 0
+        for k, v in products.items():
+            total_tax += (int(v['qnt']) * float(v['unit_price']) * float(v['tax']) / 100)
+        total_tax = round(total_tax, 2)
+        self.total_tax = total_tax
+        return total_tax
+
     def totalPurePrice(self, products):
-        total_pure_price = self.totalImpurePrice(products) - self.totalDiscount(products)
+        total_pure_price = self.totalImpurePrice(products) - self.totalDiscount(products) + self.totalTax(products)
         return total_pure_price
 
     def inputAnswer(self, input_value):
